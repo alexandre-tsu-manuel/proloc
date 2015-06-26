@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Database structure</title>
+        <style>
+            *
+            {
+                text-align: center;
+            }
+            
+            body
+            {
+                width: 90%;
+                margin: auto;
+            }
+            
+            h1
+            {
+                font-size: 50px;
+            }
+            
+            h2
+            {
+                font-size: 40px;
+                margin-bottom: 0;
+            }
+            
+            p, td
+            {
+                font-size: 18px;
+            }
+            
+            table
+            {
+                border-collapse: collapse;
+                margin: 0 auto 100px auto;
+                font-size: 22px;
+            }
+            
+            td
+            {
+                text-align: left;
+                padding: 5px 15px;
+                border: 2px solid silver;
+            }
+            
+            table, th
+            {
+                padding: 8px 15px;
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Database structure</h1>
+        <p>
+            The "deleted" field almost everywhere is because we never want to delete an information. We just hide it from the users. It is useful in the case an admin wants to investigate a litigation.
+        </p>
+
+        <h2>Members</h2>
+        <p>Membres du site</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Civility</td>
+                <td>enum</td>
+                <td>Civilité</td>
+                <td>Madam/Miss/Gentleman</td>
+            </tr>
+            <tr>
+                <td>AccountType</td>
+                <td>enum</td>
+                <td>Le type de compte</td>
+                <td>Member/Professional/Admin</td>
+            </tr>
+            <tr>
+                <td>FirstName</td>
+                <td>varchar</td>
+                <td>Prénom</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>LastName</td>
+                <td>varchar</td>
+                <td>Nom de famille</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Mail</td>
+                <td>varchar</td>
+                <td>E-mail</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Phone</td>
+                <td>varchar</td>
+                <td>Numéro de téléphone</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td>varchar</td>
+                <td>Mot de passe. Forme : sha1(mdp + pseudo + "grain de sel")</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Pseudo</td>
+                <td>varchar</td>
+                <td>Pseudonyme</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>varchar</td>
+                <td>Addresse (exemple : "65 rue Baron le Roy")</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ZIPCode</td>
+                <td>varchar</td>
+                <td>Code postal (exemple : "75012")</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Town</td>
+                <td>varchar</td>
+                <td>Ville (exemple : "Paris")</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>GeographicPoint</td>
+                <td>geography::point</td>
+                <td>La position précise du membre</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Region</td>
+                <td>varchar</td>
+                <td>Région</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>County</td>
+                <td>varchar</td>
+                <td>Département</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Money</td>
+                <td>float(10, 2)</td>
+                <td>Solde du porte-monnaie</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Banned</td>
+                <td>boolean</td>
+                <td>Indique si le membre est banni</td>
+                <td>true = banni<br />false = pas banni</td>
+            </tr>
+            <tr>
+                <td>RegistrationTime</td>
+                <td>timestamp</td>
+                <td>Quand le compte a été créé</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Average</td>
+                <td>float(1,1)</td>
+                <td>Note moyenne du membre</td>
+                <td>Va de 1 à 5<br />0 = pas assez de notes</td>
+            </tr>
+            <tr>
+                <td>Birthday</td>
+                <td>date</td>
+                <td>Date d'anniversaire</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Negotiator</td>
+                <td>boolean</td>
+                <td>Indique la valeur par défaut du champ "Negociate" quand le membre crée un article</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>AgendaIsPublic</td>
+                <td>boolean</td>
+                <td>Indique la valeur par défaut du champ "AgendaIsPublic" quand le membre crée un article</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Deleted</td>
+                <td>timestamp</td>
+                <td>Indique si le compte a été supprimé par l'utilisateur</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+        </table>
+
+        <h2>Banned</h2>
+        <p>Membres bannis</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>MemberID</td>
+                <td>int</td>
+                <td>Identifiant du membre banni</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>BanisherID</td>
+                <td>int</td>
+                <td>Identifiant du bannisseur</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>BanishmentTime</td>
+                <td>timestamp</td>
+                <td>Quand le bannissement a eu lieu</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>UnbanDate</td>
+                <td>timestamp</td>
+                <td>Unban date</td>
+                <td>0 = Banni à vie</td>
+            </tr>
+        </table>
+
+        <h2>MessagesTopic</h2>
+        <p>Members conversation</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>MemberOneID</td>
+                <td>int</td>
+                <td>ID du membre qui a entamé la conversation</td>
+                <td>-1 = administrateur</td>
+            </tr>
+            <tr>
+                <td>MemberTwoID</td>
+                <td>int</td>
+                <td>ID du second membre de la conversation</td>
+                <td>-1 = administrateur</td>
+            </tr>
+            <tr>
+                <td>Topic</td>
+                <td>varchar</td>
+                <td>Objet de la conversation</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>DeletedByOne</td>
+                <td>timestamp</td>
+                <td>Indique si le premier membre a supprimé la conversation</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+            <tr>
+                <td>DeletedByTwo</td>
+                <td>timestamp</td>
+                <td>Indique si le deuxième membre a supprimé la conversation</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+        </table>
+
+        <h2>MessagesContent</h2>
+        <p>Message inside a conversation</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>TopicID</td>
+                <td>int</td>
+                <td>The ID of the topic within which the message is sent</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Content</td>
+                <td>text</td>
+                <td>What is written within the message</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>SentTime</td>
+                <td>timestamp</td>
+                <td>When the message was sent?</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>SenderID</td>
+                <td>int</td>
+                <td>The ID of the sender (it can be the first or the second member)</td>
+                <td>-1 = administrator</td>
+            </tr>
+            <tr>
+                <td>Seen</td>
+                <td>boolean</td>
+                <td>If the other member has received the message</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Deleted</td>
+                <td>timestamp</td>
+                <td>Was the message deleted?</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+        </table>
+
+        <h2>Ratings</h2>
+        <p>Our rate system - not only people, article aswell</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>VoterID</td>
+                <td>int</td>
+                <td>The ID of the voter</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>VotedID</td>
+                <td>int</td>
+                <td>Who was voted?</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Speed</td>
+                <td>int(1)</td>
+                <td>The delivery was speed? The return was speed as the renter?</td>
+                <td>The values are necessary between 1 and 5</td>
+            </tr>
+            <tr>
+                <td>GoodEquipment</td>
+                <td>int(1)</td>
+                <td>Was the material correct? Was it in a good state?</td>
+                <td>The values are necessary between 1 and 5</td>
+            </tr>
+            <tr>
+                <td>Cleanliness</td>
+                <td>int(1)</td>
+                <td>Was the material clean? Proper?</td>
+                <td>The values are necessary between 1 and 5</td>
+            </tr>
+            <tr>
+                <td>FullEquipment</td>
+                <td>int(1)</td>
+                <td>Was the material complete? Anything was missed?</td>
+                <td>The values are necessary between 1 and 5</td>
+            </tr>
+            <tr>
+                <td>Compliance</td>
+                <td>int(1)</td>
+                <td>Were the general rules respected by the renter?</td>
+                <td>The values are necessary between 1 and 5</td>
+            </tr>
+            <tr>
+                <td>ArticleID</td>
+                <td>int</td>
+                <td>ID of the article that is concerned in the rate</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Content</td>
+                <td>text</td>
+                <td>The text of the comment</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Deleted</td>
+                <td>timestamp</td>
+                <td>States if the rating has been deleted</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+        </table>
+
+        <h2>Articles</h2>
+        <p>The different objects that are able to be rented</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td>varchar</td>
+                <td>The title</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>CategoryID</td>
+                <td>int</td>
+                <td>The (sub ?)category wich the article is into</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>PicturesAmount</td>
+                <td>int(2)</td>
+                <td>The amount of pictures uploaded with the article</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>varchar</td>
+                <td>Address (like "65 rue Baron le Roy") : where the object is</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ZIPCode</td>
+                <td>varchar</td>
+                <td>Postal code (like "75012")</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Town</td>
+                <td>varchar</td>
+                <td>Town (like "Paris")</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>GeographicPoint</td>
+                <td>geography::point</td>
+                <td>The precise location of the object</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Region</td>
+                <td>varchar</td>
+                <td>Region</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>County</td>
+                <td>varchar</td>
+                <td>County</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>text</td>
+                <td>The description</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>PriceDF</td>
+                <td>float(10, 2)</td>
+                <td>The duty free price</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>PostDate</td>
+                <td>timestamp</td>
+                <td>States when the article has been created</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Condition</td>
+                <td>enum</td>
+                <td>States the condition of the object</td>
+                <td>Damaged/Good/LikeNew/Unused</td>
+            </tr>
+            <tr>
+                <td>MemberID</td>
+                <td>int</td>
+                <td>The author of the article</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>AgendaIsPublic</td>
+                <td>boolean</td>
+                <td>States if the article agenda is visible</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Negotiable</td>
+                <td>boolean</td>
+                <td>States if the price can be negotiated</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Verified</td>
+                <td>boolean nullable</td>
+                <td>States if the article has been verified by an administrator</td>
+                <td>NULL = unseen by admin<br />true = published<br />false = refused by an admin</td>
+            </tr>
+            <tr>
+                <td>Deleted</td>
+                <td>timestamp</td>
+                <td>States if the article has been deleted by the author</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+        </table>
+
+        <h2>Offers</h2>
+        <p>All the offers and the reservations aswell</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ArticleID</td>
+                <td>int</td>
+                <td>The ID of the article from where the option was sent</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>TakerID</td>
+                <td>int</td>
+                <td>the option author</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>AdvertiserID</td>
+                <td>int</td>
+                <td>To whom the option was sent</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>StartTime</td>
+                <td>timestamp</td>
+                <td>At which time he wants to take the material?</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Endtime</td>
+                <td>timestamp</td>
+                <td>At which time he wants to give back the material?</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td>enum</td>
+                <td>The ID of the article from where the option was sent</td>
+                <td>Option = When the option is asked <br />
+					Deleted = if the option author cancelled his demand<br />
+                    Refused = If the advertiser has cancelled the option <br />
+                    Accepted = If the adveritiser has accepted the option <br />
+                    Paid = If payement is effective <br />
+                    Sent = If the material is sent by the advertiser in case of a delivery mode <br />
+                    Received = If the material is sent and received <br />
+                    SentBack = If the material is sent back by the user <br />
+                    Passed = If the renting is completely done </td>
+            </tr>
+            <tr>
+                <td>PriceDF</td>
+                <td>int</td>
+                <td>the price accepted by all parts after negotiations</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Quantity</td>
+                <td>int</td>
+                <td>How many times that article is needed?</td>
+                <td></td>
+            </tr>
+        </table>
+        
+        <h2>Favorites</h2>
+        <p>The favorite ads</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ArticleID</td>
+                <td>int</td>
+                <td>The ID of the favorite article</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>MemberID</td>
+                <td>int</td>
+                <td>Who likes that article? </td>
+                <td></td>
+            </tr>
+        </table>
+        
+        <h2>Category</h2>
+        <p>The different (sub?) categories</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Parent</td>
+                <td>int</td>
+                <td>The ID of the parent category</td>
+                <td>0 = general category<br />other = sub(sub?)category</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>varchar</td>
+                <td>The name of the category</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>text</td>
+                <td>states what the category is, detailed</td>
+                <td></td>
+            </tr>
+			<tr>
+                <td>CreatorID</td>
+                <td>int</td>
+                <td>Tells which admin created this category</td>
+                <td></td>
+            </tr>
+			<tr>
+                <td>Deleted</td>
+                <td>timestamp</td>
+                <td>Tells when the deletion occured</td>
+                <td>0 = Pas supprimé<br />autre = quand la suppression a eu lieu</td>
+            </tr>
+        </table>
+        
+        <h2>WalletOperations</h2>
+        <p>All datas about the internal wallet of each member</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Operation Time</td>
+                <td>timestamp</td>
+                <td>At which time each operation was made?</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Amount</td>
+                <td>int</td>
+                <td>The amount that was credited or debited</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>varchar</td>
+                <td>Which operation it was? </td>
+                <td></td>
+            </tr>
+        </table>
+        
+        <h2>Commands</h2>
+        <p>When an offer state becomes "Paid", a command is created</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>OfferID</td>
+                <td>int</td>
+                <td>The offer where this command comes from</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>PaymentMethod</td>
+                <td>enum</td>
+                <td>How the payment was made</td>
+                <td>Wallet/Paypal/BlueCard</td>
+            </tr>
+            <tr>
+                <td>PaymentTime</td>
+                <td>timestamp</td>
+                <td>When the payment was made</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>BillID</td>
+                <td>int</td>
+                <td>This is a bill ID. Multiple commands can have the same billID. A PDF bill can be generated with this ID.</td>
+                <td></td>
+            </tr>
+        </table>
+        
+        <h2>Unavailabilities</h2>
+        <p>Unavailabilities of each article</p>
+        <table>
+            <tr>
+                <th>Nom du champ</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Valeurs particulières</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>int auto-increment primary key</td>
+                <td>Identifiant unique</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Start Time</td>
+                <td>timestamp</td>
+                <td>Beginning time of the unavailability</td>
+                <td>normal timestamp if ReccurenceTime is None<br />0 - 86399 if Day<br />0 - 604799 if Weekeek</td>
+            </tr>
+            <tr>
+                <td>End Time</td>
+                <td>timestamp</td>
+                <td>End of the unavailability</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>ArticleID</td>
+                <td>int</td>
+                <td>ID of the article concerned by the unavailability</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>RecurrenceTime</td>
+                <td>enum</td>
+                <td>The unavailaibility is recurrent or not? Is it per day or per week?</td>
+                <td>None/Day/Week</td>
+            </tr>
+        </table>
+    </body>
+</html>
